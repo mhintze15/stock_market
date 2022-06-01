@@ -34,5 +34,5 @@ class TradeLog:
         if sum(total_shares) > 0:
             return sum(traded_price_multiplied_by_quantity) / sum(total_shares)
         else:
-            return 0
-        
+            return 0.0
+
