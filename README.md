@@ -1,6 +1,6 @@
-## Simple Stock Market
+# Simple Stock Market
 
-# Requirements
+## Requirements
 1. Provide working source code that will: <br />
  **a.** For a given stock: <br />
  &nbsp; **i)** Given any price as input, calculate the dividend yield <br />
@@ -9,7 +9,7 @@
  &nbsp; **iv)** Calculate Volume Weighted Stock Price based on trades in past 15 minutes <br />
  **b.** Calculate the GBCE All Share Index using the geometric mean of prices for all stocks
 
-# Sample data from the Global Beverage Corporation Exchange
+## Sample data from the Global Beverage Corporation Exchange
 
 Stock Sympbol | Type | Last Dividend | Fixed Dividend | Par Value
 --- | --- | --- | --- |--- 
