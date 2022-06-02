@@ -1,6 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 from datetime import datetime, timedelta
+import numpy as np
 
 
 # 1a)iii) and iv)
@@ -15,24 +16,26 @@ class Trade:
 
 @dataclass
 class TradeLog:
-    trades: List[Trade]
+    trades: List[Trade] = field(default_factory=lambda: [])
 
     def log_trade(self, trade: Trade):
         self.trades.append(trade)
 
-    @property
-    def volume_weighted_stock_price_15_min(self) -> float:
-        time = datetime.now() + timedelta(-15)
+    def volume_weighted_stock_price_15_min(self, symbol: str) -> float:
+        trades_with_symbol = [trade for trade in self.trades if trade.stock_symbol == symbol]
 
-        traded_price_multiplied_by_quantity = []
-        total_shares = []
-        for trade in self.trades:
-            if time < trade.timestamp < datetime.now():
-                traded_price_multiplied_by_quantity.append(trade.traded_price * trade.num_shares)
-                total_shares.append(trade.num_shares)
+        if len(trades_with_symbol) == 0:
+            return -1
 
-        if sum(total_shares) > 0:
-            return sum(traded_price_multiplied_by_quantity) / sum(total_shares)
-        else:
-            return 0.0
+        timestamp_15_mins_ago = datetime.now() - timedelta(minutes=15)
+        trades_in_last_15_mins = [trade for trade in trades_with_symbol if trade.timestamp >= timestamp_15_mins_ago]
+        traded_prices_in_last_15_mins = [trade.traded_price for trade in trades_in_last_15_mins]
+        volume_of_trades_in_last_15_mins = [trade.num_shares for trade in trades_in_last_15_mins]
+        
+        pennies_traded = np.dot(
+            traded_prices_in_last_15_mins,
+            volume_of_trades_in_last_15_mins
+        )
+
+        return pennies_traded / sum(volume_of_trades_in_last_15_mins)
 
